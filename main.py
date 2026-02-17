@@ -50,23 +50,23 @@ class CNN(nn.Module):
         return x
 
 
-model = CNN().to(device)
+model12 = CNN().to(device)
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(), lr=learning_rate)
+optimizer = optim.Adam(model12.parameters(), lr=learning_rate)
 
 accuracy = MulticlassAccuracy(num_classes=10).to(device)
 precision = MulticlassPrecision(num_classes=10, average="macro").to(device)
 recall = MulticlassRecall(num_classes=10, average="macro").to(device)
 
 for epoch in range(num_epochs):
-    model.train()
+    model12.train()
     running_loss = 0
 
     for data, targets in tqdm(train_loader):
         data = data.to(device)
         targets = targets.to(device)
 
-        outputs = model(data)
+        outputs = model12(data)
         loss = criterion(outputs, targets)
 
         optimizer.zero_grad()
@@ -77,13 +77,13 @@ for epoch in range(num_epochs):
 
     print(f"Epoch [{epoch+1}/{num_epochs}] Loss: {running_loss/len(train_loader):.4f}")
 
-model.eval()
+model12.eval()
 with torch.no_grad():
     for data, targets in test_loader:
         data = data.to(device)
         targets = targets.to(device)
 
-        outputs = model(data)
+        outputs = model12(data)
         preds = torch.argmax(outputs, dim=1)
 
         accuracy.update(preds, targets)
